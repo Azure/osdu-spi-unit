@@ -8,13 +8,13 @@
     <parent>
         <groupId>org.opengroup.osdu.unit-service</groupId>
         <artifactId>unit-service</artifactId>
-        <version>0.30.3-SNAPSHOT</version>
+        <version>0.30.4-SNAPSHOT</version>
         <relativePath>../../../pom.xml</relativePath>
     </parent>
 
     <packaging>jar</packaging>
     <artifactId>unit-aks</artifactId>
-    <version>0.30.3-SNAPSHOT</version>
+    <version>0.30.4-SNAPSHOT</version>
     <name>unit-aks</name>
     <description>Unit service Azure Kubernetes Deployment</description>
 

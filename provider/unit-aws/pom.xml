@@ -22,13 +22,13 @@
     <parent>
         <artifactId>unit-service</artifactId>
         <groupId>org.opengroup.osdu.unit-service</groupId>
-        <version>0.30.3-SNAPSHOT</version>
+        <version>0.30.4-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>unit-aws</artifactId>
-    <version>0.30.3-SNAPSHOT</version>
+    <version>0.30.4-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>unit-aws</name>
     <description>Unit service AWS deployment</description>

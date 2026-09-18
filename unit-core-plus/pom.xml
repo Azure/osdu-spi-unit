@@ -8,12 +8,12 @@
 	<parent>
 		<groupId>org.opengroup.osdu.unit-service</groupId>
 		<artifactId>unit-service</artifactId>
-		<version>0.30.3-SNAPSHOT</version>
+		<version>0.30.4-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<artifactId>unit-core-plus</artifactId>
-	<version>0.30.3-SNAPSHOT</version>
+	<version>0.30.4-SNAPSHOT</version>
 	<name>unit-core-plus</name>
 	<description>Unit service Community Implementation</description>
 

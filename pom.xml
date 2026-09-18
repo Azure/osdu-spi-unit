@@ -46,7 +46,7 @@
 
     <groupId>org.opengroup.osdu.unit-service</groupId>
     <artifactId>unit-service</artifactId>
-    <version>0.30.3-SNAPSHOT</version>
+    <version>0.30.4-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>unit-service</name>
     <description>Unit service</description>
