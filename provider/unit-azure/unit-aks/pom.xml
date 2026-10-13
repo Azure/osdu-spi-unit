@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.opengroup.osdu.unit-service</groupId>
+        <artifactId>unit-service</artifactId>
+        <version>0.31.0-SNAPSHOT</version>
+        <relativePath>../../../pom.xml</relativePath>
+    </parent>
+
+    <packaging>jar</packaging>
+    <artifactId>unit-aks</artifactId>
+    <version>0.31.0-SNAPSHOT</version>
+    <name>unit-aks</name>
+    <description>Unit service Azure Kubernetes Deployment</description>
+
+    <properties>
+        <app.version>1</app.version>
+        <app.id>unit-aks</app.id>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <lucene.version>8.0.0</lucene.version>
+        <resteasy.version>3.6.2.Final</resteasy.version>
+        <maven.compiler.showDeprecation>true</maven.compiler.showDeprecation>
+        <core-lib-azure.version>2.5.10</core-lib-azure.version>
+        <!-- CVE-2026-2332, CVE-2026-8384, CVE-2026-10051, CVE-2026-6790: jetty-http/-util/-server < 12.1.10 -->
+        <org-eclipse-jetty.version>12.1.10</org-eclipse-jetty.version>
+        <!-- CVE-2026-45300, CVE-2026-55688, CVE-2026-40490: async-http-client < 2.16.0 -->
+        <async-http-client.version>2.16.0</async-http-client.version>
+        <!-- CVE-2026-33117: azure-security-keyvault-keys (via core-lib-azure) < 4.10.6 -->
+        <azure-security-keyvault-keys.version>4.10.6</azure-security-keyvault-keys.version>
+        <!-- CVE-2026-44503: microsoft-kiota-abstractions (via core-lib-azure -> microsoft-graph) < 1.9.1 -->
+        <microsoft-kiota.version>1.9.1</microsoft-kiota.version>
+        <!-- CVE-2025-53864: nimbus-jose-jwt (via spring-cloud-azure-starter-active-directory) < 9.37.4 -->
+        <nimbus-jose-jwt.version>9.37.4</nimbus-jose-jwt.version>
+        <!-- CVE-2026-45292: opentelemetry-api/-context (via microsoft-kiota-authentication-azure) < 1.62.0 -->
+        <opentelemetry.version>1.62.0</opentelemetry.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.opengroup.osdu.unit-service</groupId>
+            <artifactId>unit-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.opengroup.osdu</groupId>
+            <artifactId>core-lib-azure</artifactId>
+            <version>${core-lib-azure.version}</version>
+        </dependency>
+        <!--
+            os-core-common 7.0.0 declares lettuce-core as provided (not propagated).
+            core-lib-azure's IRedisClientFactory uses lettuce types; Mockito mocking
+            and runtime instantiation require lettuce-core on the classpath.
+        -->
+        <dependency>
+            <groupId>io.lettuce</groupId>
+            <artifactId>lettuce-core</artifactId>
+            <version>${lettuce.version}</version>
+        </dependency>
+
+        <!-- Compile/runtime dependencies -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.azure.spring</groupId>
+            <artifactId>spring-cloud-azure-starter-active-directory</artifactId>
+            <version>5.25.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-core</artifactId>
+        </dependency>
+    </dependencies>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.asynchttpclient</groupId>
+                <artifactId>async-http-client</artifactId>
+                <version>${async-http-client.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-beanutils</groupId>
+                <artifactId>commons-beanutils</artifactId>
+                <version>1.11.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-bom</artifactId>
+                <version>${org-eclipse-jetty.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.azure</groupId>
+                <artifactId>azure-security-keyvault-keys</artifactId>
+                <version>${azure-security-keyvault-keys.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.kiota</groupId>
+                <artifactId>microsoft-kiota-abstractions</artifactId>
+                <version>${microsoft-kiota.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.nimbusds</groupId>
+                <artifactId>nimbus-jose-jwt</artifactId>
+                <version>${nimbus-jose-jwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.opentelemetry</groupId>
+                <artifactId>opentelemetry-api</artifactId>
+                <version>${opentelemetry.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.opentelemetry</groupId>
+                <artifactId>opentelemetry-context</artifactId>
+                <version>${opentelemetry.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>spring-boot</classifier>
+                            <mainClass>
+                                org.opengroup.osdu.unitservice.UomAksApplication
+                            </mainClass>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>
+                <configuration>
+                    <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>
