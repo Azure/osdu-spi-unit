@@ -1,0 +1,89 @@
+# Per-service upstream filter config (ADR-038), hand-planted on the fork's main
+# before initialization because the layout deviates from the conventional shape:
+# the Azure provider is a nested reactor and the Azure tests are a Python suite
+# with no testing/pom.xml, so fork_owned lists the trees (engine 1.1.0).
+# Every upstream top-level entry, testing/ entry, root pom profile, and
+# .fossa.yml module must appear here: the engine halts rather than guess.
+service: unit
+
+fork_owned:
+  - provider/unit-azure
+  - testing/unit_test_azure
+
+top_level:
+  .config: keep
+  .dockerignore: keep
+  .editorconfig: keep
+  .envrc.template: keep
+  .fossa.yml: keep
+  .gitattributes: keep
+  .gitignore: keep
+  .gitlab: strip
+  .gitlab-ci.yml: strip
+  .mvn: keep
+  .sonarlint: keep
+  .trufflehog-exclude: strip
+  data: keep
+  docs: keep
+  LICENSE: keep
+  maven: keep
+  NOTICE: keep
+  opendes-conv-repo.json: keep
+  pom.xml: keep
+  publish.yml: strip
+  README.md: strip
+  skaffold.yaml: strip
+  unit-acceptance-test: keep
+  unit-core: keep
+  unit-core-plus: strip
+
+testing:
+  README.md: keep
+  unit_test_aws: strip
+  unit_test_azure: fork
+  unit_test_baremetal: strip
+  unit_test_core: keep
+  unit_test_gc: strip
+  unit_test_gcp: strip
+  unit_test_ibm: strip
+
+profiles:
+  Default: keep
+  core: keep
+  azure: inject
+  aws: strip
+  gc: strip
+  gcp: strip
+  ibm: strip
+
+fossa_modules:
+  unit-service: keep
+  unit-core: keep
+  unit-core-plus: strip
+  unit-aks: strip
+  unit-gke: strip
+  unit-ocp: strip
+
+expected_kept:
+  - pom.xml
+  - unit-core
+  - testing/unit_test_core
+
+expected_absent:
+  - provider
+  - devops
+  - unit-core-plus
+  - .gitlab-ci.yml
+  - testing/unit_test_azure
+  - testing/unit_test_ibm
+  - testing/unit_test_baremetal
+
+inject_root_pom_azure_profile: |
+        <profile>
+            <id>azure</id>
+            <modules>
+                <module>provider/unit-azure/unit-aks</module>
+            </modules>
+        </profile>
+
+inject_testing_pom_azure_module: |
