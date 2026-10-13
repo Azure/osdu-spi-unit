@@ -1,0 +1,9 @@
+{
+  "sourceBranch": "master",
+  "pipeline": "service.gitlab-ci.yml",
+  "projectId": {
+    "staging": 55,
+    "community":5 
+  },
+  "transformations": {}
+}
