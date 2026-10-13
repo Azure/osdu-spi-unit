@@ -12,8 +12,8 @@
 /.release-please-config.json    @Azure/azure-global-energy
 
 # Fork-owned Azure source, descriptor, filter config, contributing guide, and README.
-/provider/unit-azure/      @Azure/azure-global-energy
-/testing/unit-test-azure/  @Azure/azure-global-energy
+/provider/unit-azure/               @Azure/azure-global-energy
+/testing/unit_test_azure/           @Azure/azure-global-energy
 /.spi/                          @Azure/azure-global-energy
 /.github/upstream-filter.yml    @Azure/azure-global-energy
 /.github/CODEOWNERS             @Azure/azure-global-energy
