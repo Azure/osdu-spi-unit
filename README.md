@@ -1,24 +1,25 @@
-# OSDU <Service> Service for Azure
+# OSDU Unit Service for Azure
 
-[![Release](https://img.shields.io/github/v/release/Azure/osdu-spi-<service>)](https://github.com/Azure/osdu-spi-<service>/releases)
-[![Validate](https://github.com/Azure/osdu-spi-<service>/actions/workflows/validate.yml/badge.svg?branch=main)](https://github.com/Azure/osdu-spi-<service>/actions/workflows/validate.yml)
+[![Release](https://img.shields.io/github/v/release/Azure/osdu-spi-unit)](https://github.com/Azure/osdu-spi-unit/releases)
+[![Validate](https://github.com/Azure/osdu-spi-unit/actions/workflows/validate.yml/badge.svg?branch=main)](https://github.com/Azure/osdu-spi-unit/actions/workflows/validate.yml)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
 > [!NOTE]
-> Shared service code comes from the [OSDU community upstream](<upstream-url>); the [OSDU documentation](<docs-url>) covers the API.
+> Shared service code comes from the [OSDU community upstream](https://community.opengroup.org/osdu/platform/system/reference/unit-service).
 
-<One or two sentences: what the service does for a caller. No implementation detail.>
+Unit serves the OSDU units of measure catalog: it looks up units, measurements, and unit systems, and returns the parameters that convert a value from one unit to another.
 
 ## At a glance
 
 | | |
 |---|---|
-| API base path | `<api-base-path>`, for example `/api/legal/v1/` |
-| Swagger UI | `<api-base-path>swagger` |
-| Health | `:<management-port>/actuator/health` |
-| Depends on | <Partition, Entitlements, ...> |
-| Azure resources | <Cosmos DB, Storage, Service Bus, Redis, Key Vault, ...> |
-| Deployed by | [OSDU SPI Stack](https://github.com/Azure/osdu-spi-stack) (`software/stacks/osdu/services/<service>.yaml`) |
+| API base path | `/api/unit/`, with `v3/` current and `v2/` deprecated, for example `/api/unit/v3/` |
+| Swagger UI | `/api/unit/swagger` |
+| OpenAPI | `/api/unit/api-docs`, per version at `/api/unit/api-docs/v2` and `/api/unit/api-docs/v3` |
+| Health | `:8080/api/unit/actuator/health` |
+| Depends on | Entitlements |
+| Azure resources | None for data; the catalog is a JSON file held in memory |
+| Deployed by | [OSDU SPI Stack](https://github.com/Azure/osdu-spi-stack) (`software/stacks/osdu/services-reference/unit.yaml`) |
 
 ## Repository layout
 
@@ -26,89 +27,92 @@
 
 | Path | Owner | Contents |
 |---|---|---|
-| `<service>-core/` | OSDU upstream | Shared service code |
-| `provider/<service>-azure/` | This repository | Azure provider |
-| `<service>-acceptance-test/` | OSDU upstream | End-to-end suite run against a deployed environment |
-| `testing/<service>-test-azure/` | This repository | Legacy Azure integration tests |
-| `.spi/service.yaml` | This repository | How CI deploys and tests the service on SPI Stack |
+| `unit-core/` | OSDU upstream | Shared service code |
+| `provider/unit-azure/unit-aks/` | This repository | Azure provider |
+| `unit-acceptance-test/` | OSDU upstream | End-to-end Python suite run against a deployed environment |
+| `data/` | OSDU upstream | The unit catalog, `unit_catalog_v2.json` |
+| `testing/unit_test_core/` | OSDU upstream | Shared Python integration tests |
+| `testing/unit_test_azure/` | This repository | Legacy Azure integration tests |
 
 ## Build
 
-Requires the Java release the root `pom.xml` declares and Maven 3.6.3+. OSDU dependencies resolve from the public community registry through the settings file in `.mvn`:
+Requires Java 17 and Maven 3.6.3+. OSDU dependencies resolve from the public community registry through the settings file in `.mvn`:
 
 ```bash
 mvn --settings .mvn/community-maven.settings.xml -P core,azure clean install
 ```
 
-The runnable jar lands at `provider/<service>-azure/target/<artifact>-*-spring-boot.jar`.
+The runnable jar lands at `provider/unit-azure/unit-aks/target/unit-aks-*-spring-boot.jar`.
 
 ## Configuration
 
-SPI Stack sets the service's environment from two places: the shared `osdu-config` ConfigMap and the service's own entry in [`services/<service>.yaml`](https://github.com/Azure/osdu-spi-stack/blob/main/software/stacks/osdu/services/<service>.yaml). Those files are the contract; the tables below list what <Service> actually reads from them.
-
-<List only variables the provider reads: trace each through `provider/<service>-azure/src/main/resources/application.properties`, and confirm values against a running deployment.>
+SPI Stack sets the service's environment from two places: the shared `osdu-config` ConfigMap and the service's own entry in [`services-reference/unit.yaml`](https://github.com/Azure/osdu-spi-stack/blob/main/software/stacks/osdu/services-reference/unit.yaml). Those files are the contract; the tables below list what Unit actually reads from them.
 
 **Shared, from `osdu-config`:**
 
 | Variable | Purpose |
 |---|---|
-| `AZURE_TENANT_ID` | Entra tenant |
 | `AAD_CLIENT_ID` | Application ID that caller tokens are issued for |
 | `KEYVAULT_URI` | Central Key Vault |
-| <...> | |
+| `APPINSIGHTS_KEY` | Telemetry |
+| `SERVER_PORT` | HTTP port (`8080`) |
 
-**Specific to <Service>**, from `services/<service>.yaml`:
+**Specific to Unit**, from `services-reference/unit.yaml`:
 
 | Variable and value on SPI Stack | Purpose |
 |---|---|
-| `SERVER_SERVLET_CONTEXTPATH`<br>`<api-base-path>` | API base path |
-| `AZURE_ISTIOAUTH_ENABLED`<br>`true` | Trust the mesh's token validation |
+| `SPRING_APPLICATION_NAME`<br>`unit` | Application name; the property has no default, so it must stay set |
+| `SERVER_SERVLET_CONTEXTPATH`<br>`/api/unit/` | API base path |
+| `ENTITLEMENT_URL`<br>`http://entitlements/api/entitlements/v2` | Caller authorization |
 | `AZURE_PAAS_WORKLOADIDENTITY_ISENABLED`<br>`true` | Authenticate to Azure with workload identity |
-| `PARTITION_SERVICE_ENDPOINT`<br>`http://partition/api/partition/v1` | Per-partition resource lookup |
-| <...><br> |  |
 
-The service authenticates to Azure with workload identity, which injects `AZURE_CLIENT_ID` and a federated token; there are no client secrets. Per-partition resources are resolved at request time through the Partition service.
+The stack also sets `ACCEPT_HTTP`, `AZURE_ISTIOAUTH_ENABLED`, and `PARTITION_SERVICE_ENDPOINT`; Unit reads none of them. It reads `UNIT_CATALOG_FILENAME`, which the stack leaves unset, so the default path `/mnt/unit_catalogs/unit_catalog_v2.json` applies; see [Service notes](#service-notes).
+
+The service authenticates to Azure with workload identity, which injects `AZURE_CLIENT_ID` and a federated token; there are no client secrets. Every API request is authorized by asking Entitlements for the caller's groups with the caller's token and `data-partition-id`. Unit keeps no per-partition data.
 
 ## Test
 
 | Suite | Where | Runs in CI | Run it yourself |
 |---|---|---|---|
-| Unit | `<service>-core`, `provider/<service>-azure` | Pull requests (Java Build) | `mvn ... install` from [Build](#build) |
-| Acceptance | [`<service>-acceptance-test`](<service>-acceptance-test/README.md) | Pull requests, against SPI Stack (Deploy and Test) | `spi test <service>` |
-| Integration | `testing/<service>-test-azure` | <Yes / No> | <How, or why not> |
+| Unit | `unit-core` | Pull requests (Java Build) | `mvn ... install` from [Build](#build) |
+| Acceptance | [`unit-acceptance-test`](unit-acceptance-test/docs/README.md) | No | See below |
+| Integration | `testing/unit_test_core`, `testing/unit_test_azure` | No | See below |
 
-CI runs these on pull requests from this repository that change code. Documentation-only changes skip the build, and pull requests from forks build without deploying.
+CI runs the unit tests on pull requests from this repository that change code. Documentation-only changes skip the build.
 
-**Acceptance** proves a change on real infrastructure before it merges. It calls the deployed service through the gateway as a privileged test identity, and the bindings in `.spi/service.yaml` supply its inputs. Against an environment you are connected to:
+**Acceptance** is a Python suite that calls the deployed service through the gateway with a bearer token. The Deploy and Test lane and `spi test` run Maven suites, so neither runs it. Against an environment you are connected to:
 
 ```bash
-spi test <service>                   # the image and suite the environment is running
-spi test <service> --source .        # this checkout's suite and descriptor
+cd unit-acceptance-test
+python3 -m venv venv && . venv/bin/activate
+pip install -r requirements.txt -r v3/requirements.txt
+VIRTUAL_SERVICE_HOST_NAME=<gateway> MY_TENANT=<partition> PRIVILEGED_USER_TOKEN="$(spi token)" \
+  pytest test_unit_service_v3.py
 ```
 
-**Integration** <state whether it runs against SPI Stack, and if not, what it needs that the stack does not issue.>
+**Integration** is the older Azure suite. `testing/unit_test_azure` runs the shared tests in `testing/unit_test_core` and mints its own token from a service principal secret (`INTEGRATION_TESTER`, `AZURE_TESTER_SERVICEPRINCIPAL_SECRET`). SPI Stack issues no client secrets, so the suite does not run there. Acceptance covers the same v3 API.
 
 To call the API by hand, `spi token` mints a bearer token:
 
 ```bash
 curl -H "Authorization: Bearer $(spi token)" -H "data-partition-id: <partition>" \
-  https://<gateway><api-base-path><endpoint>
+  https://<gateway>/api/unit/v3/catalog/lastmodified
 ```
 
 ## Deploy
 
-For a pull request from this repository that changes code, CI publishes the service image and its test suite image, `osdu-spi-<service>-acceptance`, to GHCR, and the Deploy and Test lane borrows an SPI Stack environment, runs the new image there, proves it with the acceptance suite, and restores the environment's own image. When that lane runs and passes, the change is proven on real infrastructure before it merges; the Validation Summary on the pull request shows whether it ran. This repository does not own infrastructure; SPI Stack does.
+For a pull request from this repository that changes code, CI publishes the service image, `osdu-spi-unit`, to GHCR. The Deploy and Test lane borrows an SPI Stack environment, runs the new image there, proves it with the test suite image `osdu-spi-unit-acceptance`, and restores the environment's own image. That lane runs only when `.spi/service.yaml` declares the suites, and the suite image builds Maven suites only, so it does not run for this repository; the Validation Summary on the pull request shows whether it ran. This repository does not own infrastructure; SPI Stack does.
 
 To try a build by hand on an environment you are connected to, pin it by digest and release the pin when done:
 
 ```bash
-spi service pin <service> --image ghcr.io/azure/osdu-spi-<service>@sha256:<digest>
-spi service reset <service>
+spi service pin unit --image ghcr.io/azure/osdu-spi-unit@sha256:<digest>
+spi service reset unit
 ```
 
 ## Service notes
 
-<Optional. Azure-specific behavior a reader needs that the upstream docs do not cover: reserved names, data model, feature flags the stack overrides and why. Delete the section if there is nothing.>
+**The catalog comes from upstream at pod start.** The service reads its whole catalog from `/mnt/unit_catalogs/unit_catalog_v2.json` at startup and does not start without it; the service image does not carry the file. On SPI Stack an init container downloads `data/unit_catalog_v2.json` from the upstream project's `master` branch each time the pod starts. The catalog served therefore follows upstream rather than this repository's `data/` copy, a restart can pick up a newer catalog, and the pod needs to reach `community.opengroup.org` to start.
 
 ## License
 
