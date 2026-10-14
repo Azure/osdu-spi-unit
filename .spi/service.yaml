@@ -1,0 +1,5 @@
+schemaVersion: 3
+service:
+  name: unit
+  archetype: java-maven-azure
+tests: {}
