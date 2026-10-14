@@ -6,8 +6,7 @@ updates:
 
   - package-ecosystem: "maven"
     directories:
-      - "/provider/*-azure"
-      - "/testing/*-test-azure"
+      - "/provider/unit-azure/unit-aks"
     schedule:
       interval: "weekly"
       day: "monday"
