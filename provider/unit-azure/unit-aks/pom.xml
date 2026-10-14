@@ -27,13 +27,13 @@
         <maven.compiler.showDeprecation>true</maven.compiler.showDeprecation>
         <core-lib-azure.version>2.5.10</core-lib-azure.version>
         <!-- CVE-2026-2332, CVE-2026-8384, CVE-2026-10051, CVE-2026-6790: jetty-http/-util/-server < 12.1.10 -->
-        <org-eclipse-jetty.version>12.1.10</org-eclipse-jetty.version>
+        <org-eclipse-jetty.version>12.1.14</org-eclipse-jetty.version>
         <!-- CVE-2026-45300, CVE-2026-55688, CVE-2026-40490: async-http-client < 2.16.0 -->
-        <async-http-client.version>2.16.0</async-http-client.version>
+        <async-http-client.version>2.16.1</async-http-client.version>
         <!-- CVE-2026-33117: azure-security-keyvault-keys (via core-lib-azure) < 4.10.6 -->
-        <azure-security-keyvault-keys.version>4.10.6</azure-security-keyvault-keys.version>
+        <azure-security-keyvault-keys.version>4.10.7</azure-security-keyvault-keys.version>
         <!-- CVE-2026-44503: microsoft-kiota-abstractions (via core-lib-azure -> microsoft-graph) < 1.9.1 -->
-        <microsoft-kiota.version>1.9.1</microsoft-kiota.version>
+        <microsoft-kiota.version>1.9.3</microsoft-kiota.version>
         <!-- CVE-2025-53864: nimbus-jose-jwt (via spring-cloud-azure-starter-active-directory) < 9.37.4 -->
         <nimbus-jose-jwt.version>9.37.4</nimbus-jose-jwt.version>
         <!-- CVE-2026-45292: opentelemetry-api/-context (via microsoft-kiota-authentication-azure) < 1.62.0 -->
