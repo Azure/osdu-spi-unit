@@ -31,7 +31,7 @@
         <!-- CVE-2026-45300, CVE-2026-55688, CVE-2026-40490: async-http-client < 2.16.0 -->
         <async-http-client.version>2.16.0</async-http-client.version>
         <!-- CVE-2026-33117: azure-security-keyvault-keys (via core-lib-azure) < 4.10.6 -->
-        <azure-security-keyvault-keys.version>4.10.6</azure-security-keyvault-keys.version>
+        <azure-security-keyvault-keys.version>4.10.7</azure-security-keyvault-keys.version>
         <!-- CVE-2026-44503: microsoft-kiota-abstractions (via core-lib-azure -> microsoft-graph) < 1.9.1 -->
         <microsoft-kiota.version>1.9.1</microsoft-kiota.version>
         <!-- CVE-2025-53864: nimbus-jose-jwt (via spring-cloud-azure-starter-active-directory) < 9.37.4 -->
