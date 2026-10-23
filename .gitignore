@@ -8,6 +8,7 @@
 *.sublime-workspace
 *.iml
 target/
+.flattened-pom.xml
 .factorypath
 
 # IDE - VSCode

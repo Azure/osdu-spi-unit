@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/v3")
+@RequestMapping({"/v2", "/v3"})
 public class InfoApi {
 
   @Autowired

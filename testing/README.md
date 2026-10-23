@@ -36,12 +36,6 @@ java -jar %UserProfile%\swagger-codegen-cli-2.2.3.jar generate -i unit_test_core
 
 The following parameters are expected as environment variables:
 
-## Google Cloud auth provider (unit_test_gc/jwt_client.py)
-
-| Variable | Contents |
-|----------|----------|
-| INTEGRATION_TESTER | go to the google IAM & admin console, navigate to Service accounts to create a key and download the account info file. |
-
 # Baremetal auth provider (unit_test_baremetal/jwt_client.py)
 
 ## Tests core (unit_test_core/constants.py)
