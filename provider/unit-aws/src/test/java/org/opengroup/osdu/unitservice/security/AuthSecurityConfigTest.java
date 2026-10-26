@@ -20,9 +20,9 @@ import org.opengroup.osdu.unitservice.api.UnitApiV3;
 import org.opengroup.osdu.unitservice.middleware.AuthenticationRequestFilter;
 import org.opengroup.osdu.unitservice.middleware.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
+import org.springframework.boot.webmvc.autoconfigure.WebMvcAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -41,10 +41,10 @@ import org.springframework.web.context.WebApplicationContext;
 class AuthSecurityConfigTest {
     private MockMvc mockMvc = null;
 
-    @MockBean
+    @MockitoBean
     private UnitApiV3 unitApiV3;
 
-    @MockBean
+    @MockitoBean
     AuthenticationService authenticationService;
 
     @Autowired

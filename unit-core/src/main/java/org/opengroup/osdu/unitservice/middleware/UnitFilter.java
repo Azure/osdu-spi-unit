@@ -51,7 +51,11 @@ public class UnitFilter implements Filter {
     for(Map.Entry<String, String> header : responseHeaders.entrySet()){
       httpResponse.setHeader(header.getKey(), header.getValue());
     }
-		httpResponse.addHeader(DpsHeaders.CORRELATION_ID, this.dpsHeaders.getCorrelationId());
+		// Spring 7 no longer commits the response while writing the body, so avoid duplicating
+		// the correlation-id header already added by ResponseHeaderFilter.
+		if (!httpResponse.containsHeader(DpsHeaders.CORRELATION_ID)) {
+			httpResponse.addHeader(DpsHeaders.CORRELATION_ID, this.dpsHeaders.getCorrelationId());
+		}
 	}
 
 	@Override

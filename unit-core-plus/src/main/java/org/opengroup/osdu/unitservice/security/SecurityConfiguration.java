@@ -34,6 +34,7 @@ public class SecurityConfiguration {
 
   private final AuthenticationRequestFilter authFilter;
 
+  // Spring Security 7 path patterns must start with "/" and may contain only one "**".
   private static final String[] AUTH_WHITELIST = {
     "/",
     "/v2/api-docs",
@@ -42,7 +43,6 @@ public class SecurityConfiguration {
     "/swagger-resources/**",
     "/swagger-ui.html",
     "/v3/info",
-    "**/v3/info",
     "/v3/_ah/**",
     "/api/unit/v3/info",
     "/webjars/**",
@@ -54,13 +54,11 @@ public class SecurityConfiguration {
     "/error",
     "/favicon.ico",
     "/api/unit/actuator/health",
-    "**/swagger-ui/**/",
+    "/swagger-ui/**",
     "/api-docs/swagger-config",
-    "**/api-docs/**",
+    "/api-docs/**",
     "/api-docs.yaml",
     "/api-docs.yaml/**",
-    "**/api-docs.yaml",
-    "**/api-docs.yaml/**",
     "/unit",
     "/health/**"
   };

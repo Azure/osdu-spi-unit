@@ -38,9 +38,20 @@
             <groupId>org.opengroup.osdu</groupId>
             <artifactId>core-lib-azure</artifactId>
             <version>${core-lib-azure.version}</version>
+            <exclusions>
+                <!-- Boot 3 starter renamed to spring-boot-starter-aspectj in Boot 4 -->
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-aop</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aspectj</artifactId>
         </dependency>
         <!--
-            os-core-common 7.0.0 declares lettuce-core as provided (not propagated).
+            os-core-common declares lettuce-core as provided (not propagated).
             core-lib-azure's IRedisClientFactory uses lettuce types; Mockito mocking
             and runtime instantiation require lettuce-core on the classpath.
         -->
@@ -65,9 +76,10 @@
             <artifactId>spring-cloud-azure-starter-active-directory</artifactId>
             <version>5.25.0</version>
         </dependency>
+        <!-- Spring Boot 4 moved the MVC and Tomcat auto-configuration out of spring-boot-autoconfigure -->
         <dependency>
-            <groupId>org.apache.tomcat.embed</groupId>
-            <artifactId>tomcat-embed-core</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webmvc</artifactId>
         </dependency>
     </dependencies>
     <dependencyManagement>

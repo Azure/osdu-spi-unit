@@ -15,6 +15,9 @@ import jakarta.servlet.ServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -60,6 +63,17 @@ public class UnitFilterTest {
         verify(dpsHeaders).addCorrelationIdIfMissing();
         verify(httpServletResponse).setHeader("Custom-Header", "Value");
         verify(httpServletResponse).addHeader(DpsHeaders.CORRELATION_ID, "correlation-id");
+    }
+
+    @Test
+    public void should_NotDuplicateCorrelationId_when_AlreadyPresent() throws IOException, ServletException {
+        when(responseHeadersFactory.getResponseHeaders("*")).thenReturn(Map.of());
+        when(httpServletResponse.containsHeader(DpsHeaders.CORRELATION_ID)).thenReturn(true);
+
+        unitFilter.doFilter(servletRequest, httpServletResponse, filterChain);
+
+        verify(filterChain).doFilter(servletRequest, httpServletResponse);
+        verify(httpServletResponse, never()).addHeader(eq(DpsHeaders.CORRELATION_ID), anyString());
     }
 
     @AfterEach
