@@ -14,6 +14,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.config.annotation.SecurityBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -73,12 +74,12 @@ public class SecurityConfig implements AccessDeniedHandler, AuthenticationEntryP
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER)
-                .and()
-                .authorizeRequests()
-                .requestMatchers(AUTH_WHITELIST).permitAll()
-                .and()
+        // Spring Security 7 removed authorizeRequests(); requests stay permitted at this layer as before,
+        // authentication is enforced by AuthenticationRequestFilter.
+        http.csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(sessionManagement ->
+                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.NEVER))
+                .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
                 .addFilterBefore((Filter) authFilter, (Class<? extends Filter>) UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
