@@ -15,9 +15,7 @@ import java.util.List;
 public class UnitSystemInfoResponse {
     @Schema(description = "The array of unit system names")
     private List<UnitSystemInfo> unitSystemInfoList;
-    @Schema(description = "The total number of elements in the list defined in the catalog",type = "integer")
     private int totalCount;
-    @Schema(description = "The offset into the list as requested",type = "integer")
     private int offset;
 
     /**
@@ -60,6 +58,8 @@ public class UnitSystemInfoResponse {
      * @return the total number
      */
     @JsonProperty("totalCount")
+    // Avoid @Schema(type = "integer"): OpenAPI 3.1 swagger-core emits type=string. Same as legal.
+    @Schema(description = "The total number of elements in the list defined in the catalog", format = "int32")
     public int getTotalCount() {return this.totalCount;}
 
     /**
@@ -67,5 +67,6 @@ public class UnitSystemInfoResponse {
      * @return the offset as requested
      */
     @JsonProperty("offset")
+    @Schema(description = "The offset into the list as requested", format = "int32")
     public int getOffset() {return this.offset;}
 }

@@ -2,10 +2,12 @@ package org.opengroup.osdu.unitservice.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import org.opengroup.osdu.unitservice.configuration.StrictDoubleDeserializer;
 import org.opengroup.osdu.unitservice.interfaces.ABCD;
 import org.opengroup.osdu.unitservice.helper.Utility;
 
@@ -16,19 +18,23 @@ Container class for the Energistics unit parameterization y = (A+B*x)/(C+D*x).
 @Schema(description = "Energistics standard parameterization y = (A+Bx)/(C+Dx)")
 public class ABCDImpl implements ABCD {
     @Expose @SerializedName("a")
-    @Schema(description = "Coefficient A in the Energistics unit parameterization y = (A+Bx)/(C+Dx)",type = "number", format = "double")
+    @Schema(description = "Coefficient A in the Energistics unit parameterization y = (A+Bx)/(C+Dx)",format = "double")
+    @JsonDeserialize(using = StrictDoubleDeserializer.class)
     private double a;
 
     @Expose @SerializedName("b")
-    @Schema(description = "Coefficient B in the Energistics unit parameterization y = (A+Bx)/(C+Dx)",type = "number", format = "double")
+    @Schema(description = "Coefficient B in the Energistics unit parameterization y = (A+Bx)/(C+Dx)",format = "double")
+    @JsonDeserialize(using = StrictDoubleDeserializer.class)
     private double b;
 
     @Expose @SerializedName("c")
-    @Schema(description = "Coefficient C in the Energistics unit parameterization y = (A+Bx)/(C+Dx)",type = "number", format = "double")
+    @Schema(description = "Coefficient C in the Energistics unit parameterization y = (A+Bx)/(C+Dx)",format = "double")
+    @JsonDeserialize(using = StrictDoubleDeserializer.class)
     private double c;
 
     @Expose @SerializedName("d")
-    @Schema(description = "Coefficient D in the Energistics unit parameterization y = (A+Bx)/(C+Dx)",type = "number", format = "double")
+    @Schema(description = "Coefficient D in the Energistics unit parameterization y = (A+Bx)/(C+Dx)",format = "double")
+    @JsonDeserialize(using = StrictDoubleDeserializer.class)
     private double d;
 
     /**
