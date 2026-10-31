@@ -2,10 +2,12 @@ package org.opengroup.osdu.unitservice.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import org.opengroup.osdu.unitservice.configuration.StrictDoubleDeserializer;
 import org.opengroup.osdu.unitservice.interfaces.ScaleOffset;
 import org.opengroup.osdu.unitservice.helper.Utility;
 
@@ -16,11 +18,13 @@ import org.opengroup.osdu.unitservice.helper.Utility;
 @Schema(description = "Unit in y = scale*(x-offset) parameterization")
 public class ScaleOffsetImpl implements ScaleOffset {
     @Expose @SerializedName("scale")
-    @Schema(description = "The offset in y = scale*(x-offset)",type = "number", format = "double")
+    @Schema(description = "The offset in y = scale*(x-offset)",format = "double")
+    @JsonDeserialize(using = StrictDoubleDeserializer.class)
     private double scale;
 
     @Expose @SerializedName("offset")
-    @Schema(description = "The scale in y = scale*(x-offset)",type = "number", format = "double")
+    @Schema(description = "The scale in y = scale*(x-offset)",format = "double")
+    @JsonDeserialize(using = StrictDoubleDeserializer.class)
     private double offset;
 
     /*

@@ -718,8 +718,12 @@ public class UnitApiV2 {
     public UnitSystemInfoResponse getUnitSystemInfoList(
             @RequestParam(value = "offset", defaultValue = "0") int offset,
             @RequestParam(value = "limit", defaultValue = "100") int limit) {
-
-        return catalog.getUnitSystemInfoList(offset, limit);
+        assertRange(offset, limit);
+        try {
+            return catalog.getUnitSystemInfoList(offset, limit);
+        } catch (Exception ex) {
+            throw AppException.createBadRequest(ex.getMessage());
+        }
     }
 
     /**

@@ -803,6 +803,18 @@ public class UnitApiV2Test {
     }
 
     @Test
+    public void getUnitSystemInfoList_outOfRangeOffset_isBadRequest() {
+        when(catalogMock.getUnitSystemInfoList(anyInt(), anyInt()))
+                .thenThrow(new IndexOutOfBoundsException("The offset is out of the range"));
+
+        AppException outOfRange = assertThrows(AppException.class,
+                () -> unitApi.getUnitSystemInfoList(2147483646, 100));
+
+        assertEquals(400, outOfRange.getError().getCode());
+        assertEquals("The offset is out of the range", outOfRange.getError().getMessage());
+    }
+
+    @Test
     public void getUnitSystem() throws Exception {
         assertNotNull(unitApi);
         UnitSystemImpl unitSystem = new UnitSystemImpl();

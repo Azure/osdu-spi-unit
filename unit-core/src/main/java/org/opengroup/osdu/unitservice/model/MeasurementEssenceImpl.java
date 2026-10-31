@@ -1,9 +1,11 @@
 package org.opengroup.osdu.unitservice.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.opengroup.osdu.unitservice.configuration.StrictStringDeserializer;
 import org.opengroup.osdu.unitservice.interfaces.MeasurementEssence;
 import org.opengroup.osdu.unitservice.helper.Utility;
 import lombok.Data;
@@ -19,12 +21,15 @@ public class MeasurementEssenceImpl implements MeasurementEssence {
 
     @Expose @SerializedName("ancestry")
     @Schema(description = "The measurement ancestry, i.e. the parent codes separated by a period symbol.",type = "string")
+    @JsonDeserialize(using = StrictStringDeserializer.class)
     private String ancestry = null;
 
     @Expose @SerializedName("type")
     @Schema(description = "The type string for this measurement",type = "string")
+    @JsonDeserialize(using = StrictStringDeserializer.class)
     private String type = null;
 
+    @JsonDeserialize(using = StrictStringDeserializer.class)
     private String baseMeasurementCode;
 
     /*
