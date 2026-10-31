@@ -32,6 +32,7 @@ top_level:
   pom.xml: keep
   publish.yml: strip
   README.md: strip
+  schemathesis-tests: keep
   skaffold.yaml: strip
   unit-acceptance-test: keep
   unit-core: keep
