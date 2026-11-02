@@ -5,9 +5,11 @@
 package org.opengroup.osdu.unitservice.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.gson.JsonSyntaxException;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import org.opengroup.osdu.unitservice.configuration.StrictStringDeserializer;
 import org.opengroup.osdu.unitservice.helper.Utility;
 import org.opengroup.osdu.unitservice.model.UnitEssenceImpl;
 
@@ -20,6 +22,7 @@ public class UnitRequest {
 	@Schema(description = "The essence of a unit parameterization")
 	private UnitEssenceImpl unitEssence;
 	@Schema(description = "The persistable reference string for the unit; optional, only one 'persistableReference' or 'essence' must be defined")
+	@JsonDeserialize(using = StrictStringDeserializer.class)
 	private String persistableReference;
 
 	/**

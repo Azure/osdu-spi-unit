@@ -789,11 +789,15 @@ public class UnitApiV3 {
             @RequestParam(value = "offset", defaultValue = "0") int offset,
             @RequestParam(value = "limit", defaultValue = "100") int limit) {
         assertRange(offset, limit);
-        UnitSystemInfoResponse unitSystemInfoList = catalog.getUnitSystemInfoList(offset, limit);
-        auditLogger.readUnitSystemSuccess(
-          Collections.singletonList(unitSystemInfoList.toString()),
-          Collections.singletonList(UnitServiceRole.UNIT_AUTHENTICATED_USER));
-        return catalog.getUnitSystemInfoList(offset, limit);
+        try {
+            UnitSystemInfoResponse unitSystemInfoList = catalog.getUnitSystemInfoList(offset, limit);
+            auditLogger.readUnitSystemSuccess(
+              Collections.singletonList(unitSystemInfoList.toString()),
+              Collections.singletonList(UnitServiceRole.UNIT_AUTHENTICATED_USER));
+            return unitSystemInfoList;
+        } catch (Exception ex) {
+            throw AppException.createBadRequest(ex.getMessage());
+        }
     }
 
     /**

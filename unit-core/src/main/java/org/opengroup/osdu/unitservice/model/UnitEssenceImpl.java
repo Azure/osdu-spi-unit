@@ -2,10 +2,14 @@ package org.opengroup.osdu.unitservice.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import org.opengroup.osdu.unitservice.configuration.StrictStringDeserializer;
 import org.opengroup.osdu.unitservice.interfaces.UnitEssence;
 import org.opengroup.osdu.unitservice.helper.Utility;
 import org.opengroup.osdu.unitservice.interfaces.MeasurementEssence;
@@ -26,6 +30,7 @@ public class UnitEssenceImpl implements UnitEssence {
 
     @Expose @SerializedName("symbol")
     @Schema(description = "Unit in y = scale*(x-offset) parameterization", type = "string")
+    @JsonDeserialize(using = StrictStringDeserializer.class)
     private String symbol;
 
     @Expose @SerializedName("baseMeasurement")
@@ -34,6 +39,7 @@ public class UnitEssenceImpl implements UnitEssence {
 	@Expose @SerializedName("type")
 	@JsonProperty("type")
     @Schema(description = "The type string for this unit essence, either 'USO' for ScaleOffset or 'UAD' for Abcd", type = "string")
+    @JsonDeserialize(using = StrictStringDeserializer.class)
     private String type;
 
     private MeasurementImpl baseMeasurement;
@@ -56,6 +62,7 @@ public class UnitEssenceImpl implements UnitEssence {
      * if {@link ABCDImpl} is null, the parameterization is expected to be done by the {@link ScaleOffsetImpl} container.
      * @param abcd ABCD instance
      */
+    @JsonSetter(nulls = Nulls.FAIL)
     public void setABCD(ABCDImpl abcd) {
         this.abcd = abcd;
     }
@@ -70,9 +77,11 @@ public class UnitEssenceImpl implements UnitEssence {
 
     /**
      * Sets the {@link ScaleOffsetImpl} container for the OSDD classic unit parameterization y = scale(x-offset).
-     * If {@link ScaleOffsetImpl} is null, the parameterization is expected to be done by the {@link ABCDImpl} container.
+     * Omitting the property leaves it null so the parameterization can be {@link ABCDImpl}.
+     * An explicit JSON null is rejected because the schema types this property as an object.
      * @param scaleOffset ScaleOffset instance
      */
+    @JsonSetter(nulls = Nulls.FAIL)
     public void setScaleOffset(ScaleOffsetImpl scaleOffset) {
         this.scaleOffset = scaleOffset;
     }
@@ -120,6 +129,7 @@ public class UnitEssenceImpl implements UnitEssence {
      * Sets the base measurement essence {@link MeasurementImpl}
      * @param measurementEssence base measurement essence
      */
+    @JsonSetter(nulls = Nulls.FAIL)
     public void setBaseMeasurementEssence(MeasurementEssenceImpl measurementEssence) {
         this.baseMeasurementEssence = measurementEssence;
     }

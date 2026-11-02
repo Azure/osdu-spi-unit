@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import org.opengroup.osdu.core.common.model.http.AppError;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,26 +19,28 @@ public class HealthCheck {
 	@Operation(summary = "${healthCheckApi.livenessCheck.summary}",
 			description = "${healthCheckApi.livenessCheck.description}", tags = { "health-check-api" })
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "CRS Catalog service is alive", content = { @Content(schema = @Schema(implementation = String.class))}),
+			@ApiResponse(responseCode = "200", description = "OK"),
 			@ApiResponse(responseCode = "400", description = "Unauthorized",  content = {@Content(schema = @Schema(implementation = AppError.class ))}),
 			@ApiResponse(responseCode = "403", description = "Forbidden",  content = {@Content(schema = @Schema(implementation = AppError.class ))}),
 			@ApiResponse(responseCode = "404", description = "Not Found",  content = {@Content(schema = @Schema(implementation = AppError.class ))}),
 	})
+	@SecurityRequirements
 	@GetMapping("/liveness_check")
-	public ResponseEntity livenessCheck() {
+	public ResponseEntity<Void> livenessCheck() {
 		return ResponseEntity.ok().build();
 	}
 
 	@Operation(summary = "${healthCheckApi.readinessCheck.summary}",
 			description = "${healthCheckApi.readinessCheck.description}", tags = { "health-check-api" })
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "CRS Catalog service is ready", content = { @Content(schema = @Schema(implementation = String.class)) }),
+			@ApiResponse(responseCode = "200", description = "OK"),
 			@ApiResponse(responseCode = "400", description = "Unauthorized",  content = {@Content(schema = @Schema(implementation = AppError.class ))}),
 			@ApiResponse(responseCode = "403", description = "Forbidden",  content = {@Content(schema = @Schema(implementation = AppError.class ))}),
 			@ApiResponse(responseCode = "404", description = "Not Found",  content = {@Content(schema = @Schema(implementation = AppError.class ))}),
 	})
+	@SecurityRequirements
 	@GetMapping("/readiness_check")
-	public ResponseEntity readinessCheck() {
+	public ResponseEntity<Void> readinessCheck() {
 		return ResponseEntity.ok().build();
 	}
 }
