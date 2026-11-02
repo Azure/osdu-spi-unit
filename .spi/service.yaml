@@ -2,4 +2,15 @@ schemaVersion: 3
 service:
   name: unit
   archetype: java-maven-azure
-tests: {}
+tests:
+  acceptance:
+    type: pytest
+    path: unit-acceptance-test
+    requirements: [requirements.txt, v3/requirements.txt]
+    pytestArguments: [test_unit_service_v3.py]
+    timeoutMinutes: 10
+    bindings:
+      VIRTUAL_SERVICE_HOST_NAME: { source: gatewayHost }
+      BASE_URL: { source: static, value: /api/unit }
+      MY_TENANT: { source: partition }
+      PRIVILEGED_USER_TOKEN: { source: token }
