@@ -22,8 +22,9 @@ Both APIs are available in Swagger at <https://[Unit_Service_Host>]/api/unit/swa
 
 ## Prerequisites
 
-1. The project builds with [maven](https://maven.apache.org/). Make sure maven is installed locally.
-1. The project requires the [Lombok](https://projectlombok.org/) plug-in installed for your IDE.
+1. The project builds with [Maven](https://maven.apache.org/). Make sure Maven is installed locally.
+2. [JDK 25](https://adoptium.net/). Set `JAVA_HOME` accordingly.
+3. The project requires the [Lombok](https://projectlombok.org/) plug-in installed for your IDE.
 
 ### Build service and run unit tests
 

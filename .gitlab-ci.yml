@@ -7,7 +7,6 @@ variables:
   AZURE_TEST_TYPE: python
   SHARE_NAME: unit
   AZURE_SKIP_INTEGRATION_TEST: 'true'
-  SERVICE_JAVA_VERSION: "17"
 
   ACCEPTANCE_TEST_DIR: $CI_PROJECT_DIR/unit-acceptance-test
   CIMPL_BAREMETAL_PYTHON_INT_TEST_SUBDIR: $CI_PROJECT_DIR/unit-acceptance-test
@@ -16,17 +15,7 @@ variables:
   # discovery and validate a single version only.
   CIMPL_OPENAPI_CONFIG_ROUTE: /api/unit/api-docs/swagger-config
 
-.maven:
-  image: maven:3.9.3-eclipse-temurin-17
-  tags: [ 'osdu-medium' ]
-  variables:
-    MAVEN_REPO_PATH: "$CI_PROJECT_DIR/.m2/repository"
-    MAVEN_CLI_OPTS: "--batch-mode --settings=$CI_PROJECT_DIR/.mvn/community-maven.settings.xml"
-gemnasium-maven-dependency_scanning:
-  variables:
-    DS_JAVA_VERSION: 17
-    # Keep Gemnasium defaults, then skip AWS/Azure provider modules (CVEs owned by provider stacks).
-    DS_EXCLUDED_PATHS: "spec, test, tests, tmp, provider/unit-aws, provider/unit-azure"
+  MAVEN_IMAGE_TAG: "3.9.16-eclipse-temurin-25"
 
 include:
   - project: "osdu/platform/ci-cd-pipelines"
@@ -37,6 +26,9 @@ include:
 
   - project: "osdu/platform/ci-cd-pipelines"
     file: "scanners/fossa-maven.yml"
+
+  - project: "osdu/platform/ci-cd-pipelines"
+    file: "scanners/sbom-maven.yml"
 
   - project: "osdu/platform/ci-cd-pipelines"
     file: "scanners/gitlab-ultimate.yml"
@@ -66,10 +58,10 @@ azure_test:
   image: community.opengroup.org:5555/osdu/platform/deployment-and-operations/base-containers-azure/azure-maven17:v0.0.1
 
 fossa-analyze:
-  image: $CI_REGISTRY/divido/fossa-with-cache:v0.9-jdk17
+  image: $CI_REGISTRY/divido/fossa-with-cache:v0.11
 
 fossa-check-notice:
-  image: $CI_REGISTRY/divido/fossa-with-cache:v0.9-jdk17
+  image: $CI_REGISTRY/divido/fossa-with-cache:v0.11
 
 .schemathesis-unit-matrix:
   parallel:
