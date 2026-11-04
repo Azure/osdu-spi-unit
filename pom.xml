@@ -4,17 +4,17 @@
 
     <properties>
         <revision>0.31.0-SNAPSHOT</revision>
-        <java.version>17</java.version>
+        <java.version>25</java.version>
         <maven.compiler.release>${java.version}</maven.compiler.release>
         <docker.image.prefix>org.opengroup.osdu</docker.image.prefix>
+        <!-- CSP Azure profile may still reference PowerMock; Community modules use Mockito 5 only. -->
         <powermock.version>2.0.6</powermock.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- OSDU Versions -->
         <os-core-common.version>8.6.0</os-core-common.version>
 
         <!-- Spring Versions. Aligned with os-core-common 8.6.0 (Spring Boot 4.0.8). -->
         <spring-boot.version>4.0.8</spring-boot.version>
-        <!-- os-core-common 7.0.0 declares lettuce-core as provided; CVE-2025-58057 requires >= 7.5.2.RELEASE -->
+        <!-- os-core-common declares lettuce-core as provided; CVE-2025-58057 requires >= 7.5.2.RELEASE -->
         <lettuce.version>7.5.2.RELEASE</lettuce.version>
         <!-- Boot 4.0.8 manages Netty 4.2.17.Final. Keep 4.2.18.Final for CVE-2026-75595, CVE-2026-75596, CVE-2026-59903. -->
         <netty.version>4.2.18.Final</netty.version>
@@ -27,7 +27,7 @@
         <json-smart.version>2.6.0</json-smart.version>
         <lucene.version>8.0.0</lucene.version>
         <!-- CVE-2026-49844, CVE-2026-34478, CVE-2026-34477, CVE-2026-34480, CVE-2025-68161: log4j-api/log4j-core < 2.25.5.
-             Wired via explicit dependencyManagement below; Spring Boot 3.5.16's BOM otherwise wins with 2.24.3. -->
+             Wired via explicit dependencyManagement below; Spring Boot BOM otherwise wins with an older pin. -->
         <log4j.version>2.25.5</log4j.version>
         <!-- Boot 4 uses Tomcat 11. Match os-core-common 8.6.0 (11.0.26), above the Boot 4.0.8 default 11.0.24. -->
         <tomcat.version>11.0.26</tomcat.version>
@@ -36,11 +36,15 @@
         <!-- CVE-2025-48924: commons-lang3 (via os-core-common) < 3.18.0, uncontrolled recursion -->
         <commons-lang3.version>3.20.0</commons-lang3.version>
         <lombok.version>1.18.42</lombok.version>
+        <!-- Nested spring-boot-dependencies → mockito-bom ignores consumer mockito.version; pin explicitly.
+             Mockito 5.20+ pulls ByteBuddy with Java 25 support (Epic 82 tip 13). -->
+        <mockito.version>5.23.0</mockito.version>
 
         <!-- Plugin Versions -->
-        <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
+        <maven-compiler-plugin.version>3.15.0</maven-compiler-plugin.version>
         <maven-surefire-plugin.version>3.5.4</maven-surefire-plugin.version>
         <jacoco.version>0.8.14</jacoco.version>
+        <osdu-enforcer-rules.version>2.0.3</osdu-enforcer-rules.version>
     </properties>
 
     <licenses>
@@ -223,6 +227,11 @@
                 <version>${os-core-common.version}</version>
             </dependency>
             <dependency>
+                <groupId>io.lettuce</groupId>
+                <artifactId>lettuce-core</artifactId>
+                <version>${lettuce.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>net.minidev</groupId>
                 <artifactId>json-smart</artifactId>
                 <version>${json-smart.version}</version>
@@ -234,6 +243,16 @@
                 <version>${lombok.version}</version>
                 <scope>provided</scope>
                 <optional>true</optional>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>${mockito.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-junit-jupiter</artifactId>
+                <version>${mockito.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.opengroup.osdu.unit-service</groupId>
@@ -370,7 +389,7 @@
                     <dependency>
                         <groupId>org.opengroup.osdu</groupId>
                         <artifactId>osdu-enforcer-rules</artifactId>
-                        <version>1.0.1</version>
+                        <version>${osdu-enforcer-rules.version}</version>
                     </dependency>
                 </dependencies>
                 <executions>
@@ -386,14 +405,32 @@
                                     <version>[3.6.3,)</version>
                                 </requireMavenVersion>
                                 <requireJavaVersion>
-                                    <version>[17,)</version>
+                                    <version>[25,)</version>
                                 </requireJavaVersion>
                                 <banDuplicatePomDependencyVersions/>
+                                <reactorModuleConvergence/>
                                 <requireSameVersions>
                                     <plugins>
                                         <plugin>org.apache.maven.plugins:maven-compiler-plugin</plugin>
                                     </plugins>
                                 </requireSameVersions>
+                                <requireSameVersions>
+                                    <plugins>
+                                        <plugin>org.apache.maven.plugins:maven-surefire-plugin</plugin>
+                                        <plugin>org.apache.maven.plugins:maven-failsafe-plugin</plugin>
+                                        <plugin>org.apache.maven.plugins:maven-surefire-report-plugin</plugin>
+                                    </plugins>
+                                </requireSameVersions>
+                                <requireReleaseDeps>
+                                    <message>No Snapshots Allowed!</message>
+                                    <excludes>
+                                        <!-- Reactor / parent (version is 0.31.0-SNAPSHOT until release). -->
+                                        <exclude>org.opengroup.osdu.unit-service:unit-service</exclude>
+                                        <exclude>org.opengroup.osdu.unit-service:unit-core</exclude>
+                                        <exclude>org.opengroup.osdu.unit-service:unit-core-plus</exclude>
+                                        <exclude>org.opengroup.osdu.unit-service:unit-aks</exclude>
+                                    </excludes>
+                                </requireReleaseDeps>
                             </rules>
                         </configuration>
                     </execution>

@@ -27,6 +27,11 @@
 			<groupId>org.opengroup.osdu.unit-service</groupId>
 			<artifactId>unit-core</artifactId>
 		</dependency>
+		<!-- os-core-common declares lettuce-core as provided; GsonCodecFactory needs RedisCodec at runtime (Epic 82 tip 16) -->
+		<dependency>
+			<groupId>io.lettuce</groupId>
+			<artifactId>lettuce-core</artifactId>
+		</dependency>
 		<!-- Compile/runtime dependencies -->
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
