@@ -9,7 +9,7 @@ unit-service is a [Spring Boot](https://spring.io/projects/spring-boot) service 
 In order to run this service locally, you will need the following:
 
 - [Maven 3.6.0+](https://maven.apache.org/download.cgi)
-- [AdoptOpenJDK17](https://adoptopenjdk.net/)
+- [JDK 25](https://adoptium.net/)
 - Infrastructure dependencies, deployable through the relevant [infrastructure template](https://dev.azure.com/slb-des-ext-collaboration/open-data-ecosystem/_git/infrastructure-templates?path=%2Finfra&version=GBmaster&_a=contents)
 - While not a strict dependency, example commands in this document use [bash](https://www.gnu.org/software/bash/)
 
@@ -73,7 +73,7 @@ Check that maven is installed:
 $ mvn --version
 Apache Maven 3.6.0
 Maven home: /usr/share/maven
-Java version: 17, vendor: AdoptOpenJDK, runtime: /usr/lib/jvm/jdk17/jre
+Java version: 25.0.4, vendor: Eclipse Adoptium, runtime: /usr/lib/jvm/temurin-25-jdk
 ...
 ```
 

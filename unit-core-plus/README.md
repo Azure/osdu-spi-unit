@@ -42,7 +42,7 @@ Check that maven is installed:
 $ mvn --version
 Apache Maven 3.8.0
 Maven home: /usr/share/maven
-Java version: 25 vendor: Eclipse Adoptium, runtime: /usr/lib/jvm/jdk-25
+Java version: 25.0.4, vendor: Eclipse Adoptium, runtime: /usr/lib/jvm/temurin-25-jdk
 ...
 ```
 
