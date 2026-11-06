@@ -25,8 +25,6 @@
         <resteasy.version>3.6.2.Final</resteasy.version>
         <maven.compiler.showDeprecation>true</maven.compiler.showDeprecation>
         <core-lib-azure.version>2.5.10</core-lib-azure.version>
-        <!-- CVE-2026-2332, CVE-2026-8384, CVE-2026-10051, CVE-2026-6790: jetty-http/-util/-server < 12.1.10 -->
-        <org-eclipse-jetty.version>12.1.10</org-eclipse-jetty.version>
         <!-- CVE-2026-45300, CVE-2026-55688, CVE-2026-40490: async-http-client < 2.16.0 -->
         <async-http-client.version>2.16.0</async-http-client.version>
         <!-- CVE-2026-33117: azure-security-keyvault-keys (via core-lib-azure) < 4.10.6 -->
@@ -95,13 +93,6 @@
                 <groupId>commons-beanutils</groupId>
                 <artifactId>commons-beanutils</artifactId>
                 <version>1.11.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-bom</artifactId>
-                <version>${org-eclipse-jetty.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>com.azure</groupId>

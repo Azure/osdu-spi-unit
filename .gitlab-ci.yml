@@ -7,6 +7,13 @@ variables:
   AZURE_TEST_TYPE: python
   SHARE_NAME: unit
   AZURE_SKIP_INTEGRATION_TEST: 'true'
+  # Full Docker Hub tag after "maven:" for Java 25 compile/test.
+  # Keep in sync with SERVICE_JAVA_VERSION.
+  # Dependency scanning: SBOM early-mover (sbom-maven.yml); do not set DS_JAVA_VERSION: "25".
+  MAVEN_IMAGE_TAG: "3.9.16-eclipse-temurin-25"
+  SERVICE_JAVA_VERSION: "3.9.16-eclipse-temurin-25"
+  # Keep scanner defaults, then skip AWS/Azure provider modules (CVEs owned by provider stacks).
+  DS_EXCLUDED_PATHS: "spec, test, tests, tmp, provider/unit-aws, provider/unit-azure"
 
   ACCEPTANCE_TEST_DIR: $CI_PROJECT_DIR/unit-acceptance-test
   CIMPL_BAREMETAL_PYTHON_INT_TEST_SUBDIR: $CI_PROJECT_DIR/unit-acceptance-test
@@ -15,7 +22,12 @@ variables:
   # discovery and validate a single version only.
   CIMPL_OPENAPI_CONFIG_ROUTE: /api/unit/api-docs/swagger-config
 
-  MAVEN_IMAGE_TAG: "3.9.16-eclipse-temurin-25"
+.maven:
+  image: maven:${MAVEN_IMAGE_TAG}
+  tags: [ 'osdu-medium' ]
+  variables:
+    MAVEN_REPO_PATH: "$CI_PROJECT_DIR/.m2/repository"
+    MAVEN_CLI_OPTS: "--batch-mode --settings=$CI_PROJECT_DIR/.mvn/community-maven.settings.xml"
 
 include:
   - project: "osdu/platform/ci-cd-pipelines"
@@ -28,10 +40,10 @@ include:
     file: "scanners/fossa-maven.yml"
 
   - project: "osdu/platform/ci-cd-pipelines"
-    file: "scanners/sbom-maven.yml"
+    file: "scanners/gitlab-ultimate.yml"
 
   - project: "osdu/platform/ci-cd-pipelines"
-    file: "scanners/gitlab-ultimate.yml"
+    file: "scanners/sbom-maven.yml"
 
   - project: "osdu/platform/ci-cd-pipelines"
     file: "cloud-providers/azure.yml"
@@ -53,6 +65,18 @@ include:
 azure_containerize:
   variables:
     AZURE_CONTAINERIZE_REPOSITORY: "https://gitlab-ci-token:${CI_JOB_TOKEN}@community.opengroup.org/osdu/platform/deployment-and-operations/base-containers-azure/service-base-image"
+
+# The shared job builds only the azure module, so unit-core resolves to the published
+# 0.31.0-SNAPSHOT from master instead of this branch. Build unit-core in the same
+# reactor so provider code is tested against branch core.
+azure_code_coverage:
+  script:
+    - mvn clean test jacoco:report -f pom.xml -P core,azure -pl provider/unit-azure/unit-aks -am
+    - cat $AZURE_BUILD_SUBDIR/target/site/jacoco/index.html | grep -o '<tfoot>.*</tfoot>'
+    - coverageText=$(cat $AZURE_BUILD_SUBDIR/target/site/jacoco/index.html | grep -o 'Total[^%]*%' | sed 's/<.*>/ /; s/Total/Jacoco Coverage Total:/')
+    - coverageValue=$(echo $coverageText | grep -o -E "[0-9]+")
+    - echo "AZURE_COVERAGE=$coverageValue" >> azure_code_coverage.env
+    - echo "Code coverage obtained ${coverageValue}"
 
 azure_test:
   image: community.opengroup.org:5555/osdu/platform/deployment-and-operations/base-containers-azure/azure-maven17:v0.0.1

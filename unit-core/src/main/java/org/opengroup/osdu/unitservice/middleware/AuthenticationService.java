@@ -1,6 +1,6 @@
 package org.opengroup.osdu.unitservice.middleware;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 import org.opengroup.osdu.core.common.entitlements.EntitlementsAPIConfig;
 import org.opengroup.osdu.core.common.entitlements.EntitlementsFactory;
 import org.opengroup.osdu.core.common.entitlements.IEntitlementsService;
@@ -41,7 +41,7 @@ public class AuthenticationService {
 
     @PostConstruct
     public void initEntitlementsFactory() {
-        HttpResponseBodyMapper httpResponseBodyMapper = new HttpResponseBodyMapper(new ObjectMapper());
+        HttpResponseBodyMapper httpResponseBodyMapper = new HttpResponseBodyMapper(new JsonMapper());
         EntitlementsAPIConfig config = EntitlementsAPIConfig.builder().rootUrl(entitlementsUrl).build();
         entitlementsFactory = new EntitlementsFactory(config, httpResponseBodyMapper);
     }

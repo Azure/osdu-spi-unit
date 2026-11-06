@@ -1,6 +1,6 @@
 package org.opengroup.osdu.unitservice.security;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.opengroup.osdu.unitservice.middleware.AuthenticationRequestFilter;
@@ -31,7 +31,7 @@ public class SecurityConfig implements AccessDeniedHandler, AuthenticationEntryP
 
     private AuthenticationRequestFilter authFilter;
 
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    private static final JsonMapper OBJECT_MAPPER = new JsonMapper();
 
     private static final String[] AUTH_WHITELIST = {
             "/",
