@@ -1,5 +1,6 @@
 package org.opengroup.osdu.unitservice.model.extended;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.opengroup.osdu.unitservice.interfaces.ConversionResult;
@@ -54,6 +55,7 @@ public class ConversionResultImpl implements ConversionResult {
      * @return ABCD result
      */
     @Override
+    @JsonProperty("abcd")
     public ABCD getABCD() {
         return abcd;
     }
