@@ -37,7 +37,7 @@
         <!-- CVE-2025-53864: nimbus-jose-jwt (via spring-cloud-azure-starter-active-directory) < 9.37.4 -->
         <nimbus-jose-jwt.version>9.37.4</nimbus-jose-jwt.version>
         <!-- CVE-2026-45292: opentelemetry-api/-context (via microsoft-kiota-authentication-azure) < 1.62.0 -->
-        <opentelemetry.version>1.62.0</opentelemetry.version>
+        <opentelemetry.version>1.67.0</opentelemetry.version>
     </properties>
 
     <dependencies>
