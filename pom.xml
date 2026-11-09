@@ -13,7 +13,7 @@
         <os-core-common.version>8.6.0</os-core-common.version>
 
         <!-- Spring Versions. Aligned with os-core-common 8.6.0 (Spring Boot 4.0.8). -->
-        <spring-boot.version>4.0.8</spring-boot.version>
+        <spring-boot.version>4.0.9</spring-boot.version>
         <!-- os-core-common declares lettuce-core as provided; CVE-2025-58057 requires >= 7.5.2.RELEASE -->
         <lettuce.version>7.5.2.RELEASE</lettuce.version>
         <!-- Boot 4.0.8 manages Netty 4.2.17.Final. Keep 4.2.18.Final for CVE-2026-75595, CVE-2026-75596, CVE-2026-59903. -->
