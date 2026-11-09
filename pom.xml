@@ -7,8 +7,6 @@
         <java.version>25</java.version>
         <maven.compiler.release>${java.version}</maven.compiler.release>
         <docker.image.prefix>org.opengroup.osdu</docker.image.prefix>
-        <!-- CSP Azure profile may still reference PowerMock; Community modules use Mockito 5 only. -->
-        <powermock.version>2.0.6</powermock.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- OSDU Versions -->
         <os-core-common.version>10.0.0</os-core-common.version>
@@ -76,7 +74,6 @@
     <modules>
         <module>unit-core</module>
         <module>unit-core-plus</module>
-        <module>provider/unit-azure/unit-aks</module>
     </modules>
 
     <repositories>
@@ -352,12 +349,6 @@
             <modules>
                 <module>unit-core</module>
                 <module>unit-core-plus</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>azure</id>
-            <modules>
-                <module>provider/unit-azure/unit-aks</module>
             </modules>
         </profile>
     </profiles>
