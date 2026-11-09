@@ -19,7 +19,7 @@
         <!-- Boot 4.0.8 manages Netty 4.2.17.Final. Keep 4.2.18.Final for CVE-2026-75595, CVE-2026-75596, CVE-2026-59903. -->
         <netty.version>4.2.18.Final</netty.version>
         <spring-security.version>7.0.7</spring-security.version>
-        <spring-framework.version>7.0.9</spring-framework.version>
+        <spring-framework.version>7.0.10</spring-framework.version>
 
         <!-- Project Versions -->
         <openapi.version>3.0.3</openapi.version>
