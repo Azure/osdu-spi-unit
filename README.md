@@ -34,39 +34,9 @@ mvn clean install
 
 ## Running Unit Service locally
 
-### Azure
+### Core-plus
 
-#### Build and run Unit Service locally using bash
-
-- Set the required environments described in [Build](##Build) and [Release/deployment](##Release/deployment) sections
-- Navigate to the Unit Service's root folder ```unit-service```
-- Build core and run unit tests in command line:
-
-```bash
-mvn clean install # To run without tests add -Dmaven.test.skip=true
-```
-
-- Navigate to the Unit Service's root folder ```unit-service```
-- Run application with command
-
-```bash
-java -jar provider/unit-azure/unit-aks/target/unit-aks-1.0.0.jar
-```
-
-#### Running Azure Unit Service using IntelliJ IDEA
-
-Navigate to the **Create Run/Debug Configuration** tool
-Select **'Add New Configuration'** and select **Application**
-
-Type the next commands into the suggested fields:
-
-- Working directory: ```{path_to_the_unit}/unit-service```
-- Main class: ```org.opengroup.osdu.unitservice.UomAksApplication```
-- Use classpath of module:  ```unit-aks```  
-***Note: If you don't see "unit-aks" in the dropdown menu - find appropriate pom.xml and click "Add as a Maven project"***
-- Environment variables: Set the required environments described in [Build](##Build) and [Release/deployment](##Release/deployment) section
-
-Execute **Run** or **Debug** for configured Application
+Instructions for running the core-plus implementation are in [unit-core-plus/README.md](unit-core-plus/README.md).
 
 ### Debug locally - e.g. using Postman
 
@@ -96,42 +66,9 @@ Headers for Postman:
 #### Server Url(full path vs relative path) configuration
 - `api.server.fullUrl.enabled=true` It will generate full server url in the OpenAPI swagger
 - `api.server.fullUrl.enabled=false` It will generate only the contextPath only
-- default value is false (Currently only in Azure it is enabled)
+- default value is false
 [Reference]:(https://springdoc.org/faq.html#_how_is_server_url_generated) 
 
-### Build and run the Docker container locally
-
-1. Run the `maven run` command to have the .jar file generated.
-1. Have the Azure subscription set up
-1. Open a Powershell
-1. Install the Azure CLI locally
-1. Authenticate yourself to Azure Container Registry (acr) with the following command:
-```az acr login --name delfi```
-1. Execute the following command to build the container image:
-```docker build -t unit .```
-1. Execute the following command to build the container image:
-```docker run -t --rm -p 8080:8080 unit```
-1. Use Postman or curl to try out the endpoints
-
-## Build
-
-### Azure
-
-VSTS build definition is located at build definitions/dps/unit-service, which
-requires the following environment variables:
-
-| Variable | Contents |
-|----------|----------|
-| UNIT_CATALOG_FILENAME | Required, file name for the unit catalog to use. Default to /mnt/unit_catalogs/unit_catalog_v2.json |
-
-## Release/deployment
-
-VSTS release/deployment requires the following environment variables:
-
-| Variable | Contents |
-|----------|----------|
-| ENTITLEMENT_URL | Required |
-
-### Google Cloud
+## Google Cloud
 
 The Google Cloud implementation of the Unit service is maintained in [gc-osdu-services](https://community.opengroup.org/osdu/platform/deployment-and-operations/base-containers-gcp/gc-osdu-services/-/tree/main/system/reference_and_helper_services/unit).

@@ -1,6 +1,0 @@
-apiVersion: v2
-name: unit-service
-appVersion: "latest"
-description: Helm Chart for installing unit-service service.
-version: 0.1.0
-type: application
