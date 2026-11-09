@@ -24,7 +24,7 @@
         <!-- Project Versions -->
         <openapi.version>3.0.3</openapi.version>
         <swagger-core.version>2.2.47</swagger-core.version>
-        <json-smart.version>2.6.0</json-smart.version>
+        <json-smart.version>2.6.1</json-smart.version>
         <lucene.version>8.0.0</lucene.version>
         <!-- CVE-2026-49844, CVE-2026-34478, CVE-2026-34477, CVE-2026-34480, CVE-2025-68161: log4j-api/log4j-core < 2.25.5.
              Wired via explicit dependencyManagement below; Spring Boot BOM otherwise wins with an older pin. -->
