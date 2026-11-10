@@ -1,30 +1,28 @@
 package org.opengroup.osdu.unitservice.configuration;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.JsonMappingException;
-
-import java.io.IOException;
+import tools.jackson.core.JsonParser;
+import tools.jackson.core.JsonToken;
+import tools.jackson.databind.DatabindException;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.ValueDeserializer;
 
 /**
  * Rejects non-string JSON tokens for {@link String} fields (for example {@code false},
  * {@code 123}, {@code null}). Omitted properties stay unset. Same rule as legal: this does
  * not depend on ObjectMapper coercion being installed on the MVC converter.
  */
-public final class StrictStringDeserializer extends JsonDeserializer<String> {
+public final class StrictStringDeserializer extends ValueDeserializer<String> {
 
     @Override
-    public String deserialize(JsonParser parser, DeserializationContext context) throws IOException {
+    public String deserialize(JsonParser parser, DeserializationContext context) {
         if (!parser.hasToken(JsonToken.VALUE_STRING)) {
             return (String) context.handleUnexpectedToken(String.class, parser);
         }
-        return parser.getText();
+        return parser.getString();
     }
 
     @Override
-    public String getNullValue(DeserializationContext context) throws JsonMappingException {
-        throw JsonMappingException.from(context.getParser(), "JSON null is not a string");
+    public String getNullValue(DeserializationContext context) {
+        throw DatabindException.from(context.getParser(), "JSON null is not a string");
     }
 }
