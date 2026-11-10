@@ -7,19 +7,24 @@
         <java.version>25</java.version>
         <maven.compiler.release>${java.version}</maven.compiler.release>
         <docker.image.prefix>org.opengroup.osdu</docker.image.prefix>
-        <!-- CSP Azure profile may still reference PowerMock; Community modules use Mockito 5 only. -->
-        <powermock.version>2.0.6</powermock.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <os-core-common.version>8.6.0</os-core-common.version>
+        <!-- OSDU Versions -->
+        <os-core-common.version>10.0.0</os-core-common.version>
 
-        <!-- Spring Versions. Aligned with os-core-common 8.6.0 (Spring Boot 4.0.8). -->
-        <spring-boot.version>4.0.8</spring-boot.version>
+        <!-- Spring Versions -->
+        <spring-boot.version>4.0.9</spring-boot.version>
         <!-- os-core-common declares lettuce-core as provided; CVE-2025-58057 requires >= 7.5.2.RELEASE -->
         <lettuce.version>7.5.2.RELEASE</lettuce.version>
-        <!-- Boot 4.0.8 manages Netty 4.2.17.Final. Keep 4.2.18.Final for CVE-2026-75595, CVE-2026-75596, CVE-2026-59903. -->
-        <netty.version>4.2.18.Final</netty.version>
+        <!-- Boot 4.0.9 manages Netty 4.2.17.Final. Keep 4.2.18.Final for CVE-2026-75595, CVE-2026-75596, CVE-2026-59903. -->
+        <netty.version>4.2.19.Final</netty.version>
         <spring-security.version>7.0.7</spring-security.version>
-        <spring-framework.version>7.0.9</spring-framework.version>
+        <spring-framework.version>7.0.10</spring-framework.version>
+        <!-- Logback 1.6.5 fixes CVE-2026-104721 (SiftingAppender); Spring Boot 4.0.9 still manages 1.5.x -->
+        <logback.version>1.6.5</logback.version>
+        <!-- Guava 33.7.2 fixes CVE-2026-102554 -->
+        <guava.version>33.7.2-jre</guava.version>
+        <!-- Spring Boot 4.0.9 manages Jetty 12.1.12; keep jetty-io/jetty-server on the latest 12.1.x patch -->
+        <jetty.version>12.1.14</jetty.version>
 
         <!-- Project Versions -->
         <openapi.version>3.0.3</openapi.version>
@@ -27,12 +32,14 @@
         <json-smart.version>2.6.0</json-smart.version>
         <lucene.version>8.0.0</lucene.version>
         <!-- CVE-2026-49844, CVE-2026-34478, CVE-2026-34477, CVE-2026-34480, CVE-2025-68161: log4j-api/log4j-core < 2.25.5.
-             Wired via explicit dependencyManagement below; Spring Boot BOM otherwise wins with an older pin. -->
+             Wired via explicit dependencyManagement below; the Spring Boot BOM otherwise wins with an older version. -->
         <log4j.version>2.25.5</log4j.version>
-        <!-- Boot 4 uses Tomcat 11. Match os-core-common 8.6.0 (11.0.26), above the Boot 4.0.8 default 11.0.24. -->
-        <tomcat.version>11.0.26</tomcat.version>
-        <!-- Jackson 2 stays on the classpath via spring-boot-jackson2. Match os-core-common 8.6.0. -->
-        <jackson.version>2.21.7</jackson.version>
+        <!-- Boot 4 uses Tomcat 11. Keep 11.0.26, above the Boot 4.0.9 default 11.0.24. -->
+        <tomcat.version>11.0.27</tomcat.version>
+        <!-- CVE-2026-59889, GHSA-mhm7-754m-9p8w, CVE-2026-54515: jackson-databind < 2.21.5.
+             Spring Boot 4 serves JSON with Jackson 3; Jackson 2 remains for swagger-core and third-party libraries. -->
+        <jackson2.version>2.21.8</jackson2.version>
+        <jackson3.version>3.1.8</jackson3.version>
         <!-- CVE-2025-48924: commons-lang3 (via os-core-common) < 3.18.0, uncontrolled recursion -->
         <commons-lang3.version>3.20.0</commons-lang3.version>
         <lombok.version>1.18.42</lombok.version>
@@ -45,6 +52,8 @@
         <maven-surefire-plugin.version>3.5.4</maven-surefire-plugin.version>
         <jacoco.version>0.8.14</jacoco.version>
         <osdu-enforcer-rules.version>2.0.3</osdu-enforcer-rules.version>
+        <!-- Same exclusions as the unit-core jacoco configuration -->
+        <sonar.coverage.exclusions>**/unitservice/configuration/**,**/unitservice/swagger/**</sonar.coverage.exclusions>
     </properties>
 
     <licenses>
@@ -99,11 +108,33 @@
                  os-core-common last as it provides the default dependencies for the project. -->
 
             <!-- BOM Section Start -->
-            <!-- netty-bom first so it wins over Spring Boot's Netty 4.1.x (CVE-2025-58057 et al) -->
+            <!-- netty-bom first so it wins over Spring Boot's Netty (CVE-2025-58057 et al) -->
             <dependency>
                 <groupId>io.netty</groupId>
                 <artifactId>netty-bom</artifactId>
                 <version>${netty.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!-- Patched Jackson 2 / Jackson 3 and Jetty BOMs before Spring Boot so they override its older defaults -->
+            <dependency>
+                <groupId>com.fasterxml.jackson</groupId>
+                <artifactId>jackson-bom</artifactId>
+                <version>${jackson2.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>tools.jackson</groupId>
+                <artifactId>jackson-bom</artifactId>
+                <version>${jackson3.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-bom</artifactId>
+                <version>${jetty.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -199,16 +230,20 @@
                 <version>${log4j.version}</version>
             </dependency>
 
-            <!-- CVE-2026-59889, GHSA jackson-databind #1035, CVE-2026-54515: jackson-databind < 2.21.5 -->
             <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-core</artifactId>
-                <version>${jackson.version}</version>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${logback.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-databind</artifactId>
-                <version>${jackson.version}</version>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-core</artifactId>
+                <version>${logback.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
             </dependency>
 
             <!-- CVE-2025-48924: commons-lang3 (transitive via os-core-common) < 3.18.0 -->
@@ -279,12 +314,6 @@
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>${openapi.version}</version>
-        </dependency>
-        <!-- Boot 4 defaults to Jackson 3. This service and os-core-common still use Jackson 2. -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-jackson2</artifactId>
-            <version>${spring-boot.version}</version>
         </dependency>
         <dependency>
             <groupId>net.minidev</groupId>
