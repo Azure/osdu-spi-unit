@@ -2,6 +2,9 @@ schemaVersion: 3
 service:
   name: unit
   archetype: java-maven-azure
+componentGovernance:
+  upstream: https://community.opengroup.org/osdu/platform/system/reference/unit-service
+  ignoreDirectories: [unit-acceptance-test, testing, data]
 tests:
   acceptance:
     type: pytest
