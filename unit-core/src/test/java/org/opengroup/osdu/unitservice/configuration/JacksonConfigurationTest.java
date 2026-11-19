@@ -1,6 +1,6 @@
 package org.opengroup.osdu.unitservice.configuration;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opengroup.osdu.unitservice.model.ABCDImpl;
@@ -10,23 +10,25 @@ import org.opengroup.osdu.unitservice.request.ConversionABCDRequest;
 import org.opengroup.osdu.unitservice.request.MeasurementRequest;
 import org.opengroup.osdu.unitservice.request.SearchRequest;
 import org.opengroup.osdu.unitservice.request.UnitRequest;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.http.converter.HttpMessageConverters;
+import org.springframework.http.converter.json.JacksonJsonHttpMessageConverter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class JacksonConfigurationTest {
 
-    private ObjectMapper objectMapper;
+    private JsonMapper objectMapper;
 
     @BeforeEach
     public void setup() {
-        objectMapper = new ObjectMapper();
-        JacksonConfiguration.applyStrictCoercion(objectMapper);
+        objectMapper = JacksonConfiguration.strictCopyOf(new JsonMapper());
     }
 
     @Test
@@ -41,7 +43,7 @@ public class JacksonConfigurationTest {
         assertNull(omitted.getQuery());
 
         assertThrows(Exception.class, () -> objectMapper.readValue("\"AAA\"", SearchRequest.class));
-        assertThrows(Exception.class, () -> new ObjectMapper().readValue("\"AAA\"", SearchRequest.class));
+        assertThrows(Exception.class, () -> new JsonMapper().readValue("\"AAA\"", SearchRequest.class));
     }
 
     @Test
@@ -74,7 +76,7 @@ public class JacksonConfigurationTest {
 
     @Test
     public void should_rejectSchemaViolations_onPlainObjectMapperUsedByMvc() throws Exception {
-        ObjectMapper plain = new ObjectMapper();
+        JsonMapper plain = new JsonMapper();
 
         assertThrows(Exception.class, () -> plain.readValue("{\"query\": false}", SearchRequest.class));
         assertThrows(Exception.class, () -> plain.readValue("{\"query\": null}", SearchRequest.class));
@@ -94,17 +96,31 @@ public class JacksonConfigurationTest {
     }
 
     @Test
-    public void mvcConverterUsesACopyOfTheSharedMapper() throws Exception {
-        ObjectMapper shared = new ObjectMapper();
-        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter(shared);
+    public void mvcConverterUsesAStrictCopyOfTheSharedMapper() throws Exception {
+        JsonMapper shared = new JsonMapper();
+        SpringWebMvcConfiguration.StrictJsonConverterCustomizer customizer =
+                new SpringWebMvcConfiguration().strictJsonConverterCustomizer(shared);
 
-        new SpringWebMvcConfiguration().extendMessageConverters(List.of(converter));
-
-        assertNotSame(shared, converter.getObjectMapper());
+        JsonMapper strict = customizer.getJsonMapper();
+        assertNotSame(shared, strict);
         String abcdNull = "{\"abcd\": null, \"scaleOffset\": {\"scale\": 1.0, \"offset\": 0.0}, \"symbol\": \"m\", \"type\": \"USO\"}";
         assertThrows(Exception.class, () -> shared.readValue(abcdNull, UnitEssenceImpl.class));
-        assertThrows(Exception.class, () -> converter.getObjectMapper().readValue(abcdNull, UnitEssenceImpl.class));
-        assertThrows(Exception.class, () -> converter.getObjectMapper().readValue("{\"query\": false}", SearchRequest.class));
+        assertThrows(Exception.class, () -> strict.readValue(abcdNull, UnitEssenceImpl.class));
+        assertThrows(Exception.class, () -> strict.readValue("{\"query\": false}", SearchRequest.class));
+        assertThrows(Exception.class, () -> strict.readValue("{\"a\": 1.5, \"b\": \"2\", \"c\": 0, \"d\": 4}", ABCDImpl.class));
+        // Unknown properties stay ignored, as with the Jackson 2 mapper.
+        assertEquals("m", strict.readValue("{\"query\": \"m\", \"unknown\": 1}", SearchRequest.class).getQuery());
+
+        HttpMessageConverters.ServerBuilder builder = HttpMessageConverters.forServer().registerDefaults();
+        customizer.customize(builder);
+        List<JacksonJsonHttpMessageConverter> jsonConverters = new ArrayList<>();
+        builder.build().forEach(converter -> {
+            if (converter instanceof JacksonJsonHttpMessageConverter jackson) {
+                jsonConverters.add(jackson);
+            }
+        });
+        assertEquals(1, jsonConverters.size());
+        assertSame(strict, jsonConverters.get(0).getMapper());
     }
 
     @Test
