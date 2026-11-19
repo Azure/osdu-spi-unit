@@ -5,7 +5,7 @@
 package org.opengroup.osdu.unitservice.request;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonDeserialize;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.opengroup.osdu.unitservice.configuration.StrictStringDeserializer;
