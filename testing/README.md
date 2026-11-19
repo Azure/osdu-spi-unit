@@ -51,7 +51,7 @@ The following parameters are expected as environment variables:
 Go to the provider folder:
 
 ```bash
-cd unit_test_$PROVIDER_NAME/ # e.g. unit_test_azure
+cd unit_test_$PROVIDER_NAME/ # e.g. unit_test_baremetal
 ```
 
 To set up a virtual environment:
