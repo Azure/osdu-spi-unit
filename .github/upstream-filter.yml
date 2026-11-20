@@ -27,7 +27,7 @@ top_level:
   docs: keep
   LICENSE: keep
   maven: keep
-  NOTICE: keep
+  NOTICE: strip
   opendes-conv-repo.json: keep
   pom.xml: keep
   publish.yml: strip
