@@ -17,7 +17,7 @@
         <lettuce.version>7.5.2.RELEASE</lettuce.version>
         <!-- Boot 4.0.9 manages Netty 4.2.17.Final. Keep 4.2.18.Final for CVE-2026-75595, CVE-2026-75596, CVE-2026-59903. -->
         <netty.version>4.2.19.Final</netty.version>
-        <spring-security.version>7.0.7</spring-security.version>
+        <spring-security.version>7.0.9</spring-security.version>
         <spring-framework.version>7.0.10</spring-framework.version>
         <!-- Logback 1.6.5 fixes CVE-2026-104721 (SiftingAppender); Spring Boot 4.0.9 still manages 1.5.x -->
         <logback.version>1.6.5</logback.version>
