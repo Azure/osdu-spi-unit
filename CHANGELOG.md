@@ -1,5 +1,86 @@
 # Changelog
 
+## [1.4.1](https://github.com/Azure/osdu-spi-unit/compare/v1.4.0...v1.4.1) (2026-11-24)
+
+
+### 🐛 Bug Fixes
+
+* [Venus] Remove IBM provider code and CI/CD from Unit ([#588](https://github.com/Azure/osdu-spi-unit/issues/588)) ([2ba0384](https://github.com/Azure/osdu-spi-unit/commit/2ba0384b2e0c7ca6c6cebf2b957bfc50aaf5b923))
+* **aks:** Keep Jackson 2 as the MVC JSON mapper ([9dd9356](https://github.com/Azure/osdu-spi-unit/commit/9dd93560fd57504f77b3099c229227ccd205323e))
+* **aks:** Use Jackson 2 as preferred JSON mapper ([584f7ad](https://github.com/Azure/osdu-spi-unit/commit/584f7add5099e7cf83b6a9e350a73e582efbe835))
+* Allow /info without a token for v2 and v3 ([2cb6327](https://github.com/Azure/osdu-spi-unit/commit/2cb63270f2e5588ddc05e697b1b5d7f3af95a861))
+* Allow /info without a token for v2 and v3 ([adb6d45](https://github.com/Azure/osdu-spi-unit/commit/adb6d45836141435d67826d8eae2dc9795fc0cd3))
+* **azure:** Port unit-aks provider to Spring Boot 4 and Security 7 ([709b19c](https://github.com/Azure/osdu-spi-unit/commit/709b19c7b780992921df7c5b1d397bde329be037))
+* Replace unresolvable CODEOWNERS team with @Azure/osdu-spi ([bac606f](https://github.com/Azure/osdu-spi-unit/commit/bac606f031eea46fcb2874926ca4b5665bd1875b))
+* Replace unresolvable CODEOWNERS team with @Azure/osdu-spi ([7489b73](https://github.com/Azure/osdu-spi-unit/commit/7489b735a2c6dee37ff6f48796be8ebc80ff5035))
+* Sync upstream changes from 2cb63270 ([502f2bd](https://github.com/Azure/osdu-spi-unit/commit/502f2bd396cd657f66647ed11244e6b838fc5ea3))
+* Sync upstream changes from 44af9ba0 ([68bc131](https://github.com/Azure/osdu-spi-unit/commit/68bc131792c05c49ea7f1e61a3fd00a7de30b764))
+* Sync upstream changes from 8b1a7aa5 ([a576ede](https://github.com/Azure/osdu-spi-unit/commit/a576edec18a36a4aae3fe13c446df6ba4e345687))
+* Sync upstream changes from 96e86129 ([1db28d2](https://github.com/Azure/osdu-spi-unit/commit/1db28d25d67014e9fb7310b38df76aa843e53f29))
+* **upstream-filter:** Keep schemathesis-tests in upstream sync ([79ab2f4](https://github.com/Azure/osdu-spi-unit/commit/79ab2f47f581b45ded252a25b397d7871b11c285))
+* **upstream:** Keep schemathesis-tests in upstream filter ([19b8223](https://github.com/Azure/osdu-spi-unit/commit/19b8223490d73c09e6fab50bc3b913163729e7e4))
+
+
+### 🔧 Miscellaneous
+
+* Declare component governance inputs ([2c2936b](https://github.com/Azure/osdu-spi-unit/commit/2c2936bc85c8494952a297fd1dee448f624ab89f))
+* Declare component governance inputs ([a0a0368](https://github.com/Azure/osdu-spi-unit/commit/a0a0368381d44d66b101fe26848f442a5744f16a))
+* Generate filtered upstream tree ([8a17869](https://github.com/Azure/osdu-spi-unit/commit/8a1786963c89504ae4bb262c82b60b8db5c29719))
+* Generate filtered upstream tree ([e31fe1e](https://github.com/Azure/osdu-spi-unit/commit/e31fe1ebf0f7731c2829bb7c9fc308121e9cf7b1))
+* Generate filtered upstream tree ([25ff7f4](https://github.com/Azure/osdu-spi-unit/commit/25ff7f44da8d57d3b3e25465c395dbc1b605c411))
+* Generate filtered upstream tree ([2cfbe6e](https://github.com/Azure/osdu-spi-unit/commit/2cfbe6e9c1289e9059cc1a82430d2d9ba6322ba3))
+* **notice:** Refresh NOTICE from Component Governance ([474359b](https://github.com/Azure/osdu-spi-unit/commit/474359b0ebc6ec4b0c7fa20839c1b8a859b59823))
+* **notice:** Refresh NOTICE from Component Governance ([942ddd0](https://github.com/Azure/osdu-spi-unit/commit/942ddd00dc9f4d30820a53b99cc6f1ec4da41f7b))
+* Remove Azure provider and Azure CI/CD ([44af9ba](https://github.com/Azure/osdu-spi-unit/commit/44af9ba00ce177254e4c0f24ce6465a8062fa43f))
+* Remove Azure provider and Azure CI/CD ([109c836](https://github.com/Azure/osdu-spi-unit/commit/109c836e841ed1257c29cda23e480fc6048a0755))
+* Stamp fork-owned pom versions ([c3feead](https://github.com/Azure/osdu-spi-unit/commit/c3feead0cf9318158a9f1b354f430413e75690aa))
+* Sync template updates ([5fefe6b](https://github.com/Azure/osdu-spi-unit/commit/5fefe6b6f361e639313197ccd01d4dcf1970fc33))
+* Sync template updates ([57d9af4](https://github.com/Azure/osdu-spi-unit/commit/57d9af46b66065765ceba54c6c29dbdc96b886bb))
+* Sync template updates ([c355015](https://github.com/Azure/osdu-spi-unit/commit/c3550152d15a6a3673e234ca5585bd12916657c7))
+* Sync template updates ([5ebaa56](https://github.com/Azure/osdu-spi-unit/commit/5ebaa561e37349c029475a17166f818e85b3e0b6))
+* Sync template updates ([57c4175](https://github.com/Azure/osdu-spi-unit/commit/57c41755d80ee7f429431df542232431f298a7aa))
+* Sync template updates ([c9b9ead](https://github.com/Azure/osdu-spi-unit/commit/c9b9ead8eee07818cd97bfbd5fcd3f2cb975478b))
+* Sync template updates ([731796e](https://github.com/Azure/osdu-spi-unit/commit/731796eece32401b7d941a42a19352c00b301db3))
+* Sync template updates ([caa3817](https://github.com/Azure/osdu-spi-unit/commit/caa38174250581d94a9a1e17b0bd3f478eec5c87))
+* Sync template updates ([28aba65](https://github.com/Azure/osdu-spi-unit/commit/28aba65e334dd78f339a1b7a75c62bba4ff55fec))
+* Sync template updates ([53258a6](https://github.com/Azure/osdu-spi-unit/commit/53258a60cd1a0168fd07a5ca2fd37be1baf438f7))
+* Sync template updates ([b06efab](https://github.com/Azure/osdu-spi-unit/commit/b06efab64c150fdf8441ccaef0e12281d5ebc343))
+* Sync template updates ([6371e3a](https://github.com/Azure/osdu-spi-unit/commit/6371e3aea6e53688eb969200e6bece4b21b0b67c))
+* Sync template updates ([d218615](https://github.com/Azure/osdu-spi-unit/commit/d2186159872f6b27dab50cd7bbf4581d1d460fa3))
+* **template-sync:** Sync template updates (updated 2026-10-22) ([f03fe2b](https://github.com/Azure/osdu-spi-unit/commit/f03fe2b69afd0b78360bef43cc400015d4afda2d))
+* **template-sync:** Sync template updates (updated 2026-10-27) ([4646735](https://github.com/Azure/osdu-spi-unit/commit/4646735dc4aa05e6b5b2f97034e911a362c5241a))
+* **template-sync:** Sync template updates (updated 2026-10-31) ([da4ca41](https://github.com/Azure/osdu-spi-unit/commit/da4ca412018ee9ea8a71510414521375d7be4259))
+* **template-sync:** Sync template updates (updated 2026-11-02) ([178f42d](https://github.com/Azure/osdu-spi-unit/commit/178f42d4ad2617ad1630806183ce281622d63565))
+* **template-sync:** Sync template updates (updated 2026-11-04) ([90d3e53](https://github.com/Azure/osdu-spi-unit/commit/90d3e53f43b9a4cb336cdc5c471a1116d72ca942))
+* **template-sync:** Sync template updates (updated 2026-11-13) ([6129a3d](https://github.com/Azure/osdu-spi-unit/commit/6129a3d938be2a03f3ae7b7535cd9481db2f2cba))
+* **template-sync:** Sync template updates (updated 2026-11-18) ([c940e48](https://github.com/Azure/osdu-spi-unit/commit/c940e4838d22818e77996e9a39b0274179e61a4f))
+* **template-sync:** Sync template updates 2026-10-27 ([0efe1a8](https://github.com/Azure/osdu-spi-unit/commit/0efe1a88c4f7bea98afa6611bf9b6bee29f46ab2))
+* **template-sync:** Sync template updates 2026-11-02 ([4f2c06f](https://github.com/Azure/osdu-spi-unit/commit/4f2c06ff396fe9a31275f6eaeefa13c0e50f1499))
+* **template-sync:** Sync template updates 2026-11-02 ([7536fad](https://github.com/Azure/osdu-spi-unit/commit/7536fad40e93ecf237cb5140ee8996ea7a96d5b2))
+* **template-sync:** Sync template updates 2026-11-05 ([424af46](https://github.com/Azure/osdu-spi-unit/commit/424af46fe62fe1f210f1bf395ee51ec13fee5e10))
+* **template-sync:** Sync template updates 2026-11-06 ([c77ce0d](https://github.com/Azure/osdu-spi-unit/commit/c77ce0d26944b4e8594784486369582f6982d9fd))
+* **template-sync:** Sync template updates 2026-11-24 ([847db09](https://github.com/Azure/osdu-spi-unit/commit/847db09ae87f60b888ff04ae3a37390a1c31aecc))
+* Update NOTICE from fossa-check-notice ([9aa940c](https://github.com/Azure/osdu-spi-unit/commit/9aa940c14444e9b482ddc68e2983e731d04411f2))
+* Update NOTICE from fossa-check-notice ([1876ba8](https://github.com/Azure/osdu-spi-unit/commit/1876ba84ebf25290576d7d2a99a5e2f61d77b491))
+
+
+### 🔨 Build System
+
+* **azure:** Upgrade core-lib-azure to 5.0.0 for Spring Boot 4 ([5e37331](https://github.com/Azure/osdu-spi-unit/commit/5e3733190c40d7acb04ac7702d7bca5c51efcd23))
+* **deps:** Bump jetty and azure test requirements ([b683ed2](https://github.com/Azure/osdu-spi-unit/commit/b683ed2962d312b3cd882f2864746ced3dc3d9a4))
+* **deps:** Bump opentelemetry and azure test requirements ([65eb47f](https://github.com/Azure/osdu-spi-unit/commit/65eb47f81444c5ba3c42c03b5b4b4d8b6b29779c))
+* **deps:** Bump pyyaml from 5.3.1 to 5.4 in /testing/unit_test_azure ([14b3dd5](https://github.com/Azure/osdu-spi-unit/commit/14b3dd59a74f004dcb4e44db87ca2a8fff413d6e))
+* **deps:** Bump pyyaml from 5.3.1 to 5.4 in /testing/unit_test_azure ([0da07db](https://github.com/Azure/osdu-spi-unit/commit/0da07db45d70a87b1d68e58e0b084b5c0a560053))
+* **deps:** Consolidate fork-owned dependabot bumps ([cb93266](https://github.com/Azure/osdu-spi-unit/commit/cb932665cc3bfa6c1d00c605ef6937ea8071dd10))
+* **deps:** Consolidate fork-owned dependabot bumps ([ed66c4a](https://github.com/Azure/osdu-spi-unit/commit/ed66c4ae7bd3015137dc34f043b6e41e1cdfdc6f))
+* **deps:** Upgrade core-lib-azure to 5.0.0 and use its BOM ([08f9008](https://github.com/Azure/osdu-spi-unit/commit/08f9008c91c4bbb59c6c45499c0cbc5ee13b7be6))
+
+
+### ⚙️ Continuous Integration
+
+* **spi:** Configure acceptance test suite in service.yaml ([6fb4ca2](https://github.com/Azure/osdu-spi-unit/commit/6fb4ca2cd13705ebd735ab447416e7fe64828e3e))
+* **spi:** Declare the pytest acceptance suite ([bf3853a](https://github.com/Azure/osdu-spi-unit/commit/bf3853a2e17535fcc53df1604bffccb2becfbedc))
+
 ## [1.4.0](https://github.com/Azure/osdu-spi-unit/compare/v1.3.0...v1.4.0) (2026-10-14)
 
 
